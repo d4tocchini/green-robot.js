@@ -8,9 +8,9 @@
     "test": "run-script-os",
     "test:darwin:linux": "jasmine 'test/**/*.js'",
     "test:win32": "jasmine test/**/*.js",
-    "install": "node-gyp rebuild",
+    "build-node": "node-gyp rebuild",
     "build-electron": "HOME=~/.electron-gyp node-gyp rebuild  --target=7.0.0 --arch=x64 --dist-url=https://electronjs.org/headers",
-    "prebuild": "prebuild --all"
+    "_prebuild": "prebuild --all"
   },
   "repository": {
     "type": "git",
@@ -41,8 +41,7 @@
   },
   "homepage": "https://github.com/octalmage/robotjs",
   "dependencies": {
-    "nan": "^2.14.0",
-    "prebuild-install": "^5.3.2"
+    "nan":"2.14.0"
   },
   "devDependencies": {
     "jasmine": "^2.99.0",

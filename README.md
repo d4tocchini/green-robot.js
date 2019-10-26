@@ -2,7 +2,7 @@
 
 - [x] V8 7.7 API (electron@7 & node@12-13)
 - [x] V8 7.6 API
-
+- [x] context-aware, *should be* safe with workers & electron renderer process reuse
 
 <p align="center"><img src="https://cldup.com/1ATDf2JMtv.png"></p>
 

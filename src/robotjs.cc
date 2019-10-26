@@ -831,64 +831,77 @@ NAN_METHOD(getColor)
 
 }
 
-NAN_MODULE_INIT(InitAll)
-{
-	Nan::Set(target, Nan::New("dragMouse").ToLocalChecked(),
+NAN_MODULE_INIT(Initialize) {
+	//   auto isolate = context->GetIsolate();
+	auto exports = target;
+
+	
+	Nan::Set(exports,
+		Nan::New("dragMouse").ToLocalChecked(),
 		Nan::GetFunction(Nan::New<FunctionTemplate>(dragMouse)).ToLocalChecked());
 
-	Nan::Set(target, Nan::New("moveMouse").ToLocalChecked(),
+
+	// Nan::Set(exports, ,
+	// 	);
+
+	Nan::Set(exports, Nan::New("moveMouse").ToLocalChecked(),
 		Nan::GetFunction(Nan::New<FunctionTemplate>(moveMouse)).ToLocalChecked());
 
-	Nan::Set(target, Nan::New("moveMouseSmooth").ToLocalChecked(),
+	Nan::Set(exports, Nan::New("moveMouseSmooth").ToLocalChecked(),
 		Nan::GetFunction(Nan::New<FunctionTemplate>(moveMouseSmooth)).ToLocalChecked());
 
-	Nan::Set(target, Nan::New("getMousePos").ToLocalChecked(),
+	Nan::Set(exports, Nan::New("getMousePos").ToLocalChecked(),
 		Nan::GetFunction(Nan::New<FunctionTemplate>(getMousePos)).ToLocalChecked());
 
-	Nan::Set(target, Nan::New("mouseClick").ToLocalChecked(),
+	Nan::Set(exports, Nan::New("mouseClick").ToLocalChecked(),
 		Nan::GetFunction(Nan::New<FunctionTemplate>(mouseClick)).ToLocalChecked());
 
-	Nan::Set(target, Nan::New("mouseToggle").ToLocalChecked(),
+	Nan::Set(exports, Nan::New("mouseToggle").ToLocalChecked(),
 		Nan::GetFunction(Nan::New<FunctionTemplate>(mouseToggle)).ToLocalChecked());
 
-	Nan::Set(target, Nan::New("scrollMouse").ToLocalChecked(),
+	Nan::Set(exports, Nan::New("scrollMouse").ToLocalChecked(),
 		Nan::GetFunction(Nan::New<FunctionTemplate>(scrollMouse)).ToLocalChecked());
 
-	Nan::Set(target, Nan::New("setMouseDelay").ToLocalChecked(),
+	Nan::Set(exports, Nan::New("setMouseDelay").ToLocalChecked(),
 		Nan::GetFunction(Nan::New<FunctionTemplate>(setMouseDelay)).ToLocalChecked());
 
-	Nan::Set(target, Nan::New("keyTap").ToLocalChecked(),
+	Nan::Set(exports, Nan::New("keyTap").ToLocalChecked(),
 		Nan::GetFunction(Nan::New<FunctionTemplate>(keyTap)).ToLocalChecked());
 
-	Nan::Set(target, Nan::New("keyToggle").ToLocalChecked(),
+	Nan::Set(exports, Nan::New("keyToggle").ToLocalChecked(),
 		Nan::GetFunction(Nan::New<FunctionTemplate>(keyToggle)).ToLocalChecked());
 
-	Nan::Set(target, Nan::New("typeString").ToLocalChecked(),
+	Nan::Set(exports, Nan::New("typeString").ToLocalChecked(),
 		Nan::GetFunction(Nan::New<FunctionTemplate>(typeString)).ToLocalChecked());
 
-	Nan::Set(target, Nan::New("typeStringDelayed").ToLocalChecked(),
+	Nan::Set(exports, Nan::New("typeStringDelayed").ToLocalChecked(),
 		Nan::GetFunction(Nan::New<FunctionTemplate>(typeStringDelayed)).ToLocalChecked());
 
-	Nan::Set(target, Nan::New("setKeyboardDelay").ToLocalChecked(),
+	Nan::Set(exports, Nan::New("setKeyboardDelay").ToLocalChecked(),
 		Nan::GetFunction(Nan::New<FunctionTemplate>(setKeyboardDelay)).ToLocalChecked());
 
-	Nan::Set(target, Nan::New("getPixelColor").ToLocalChecked(),
+	Nan::Set(exports, Nan::New("getPixelColor").ToLocalChecked(),
 		Nan::GetFunction(Nan::New<FunctionTemplate>(getPixelColor)).ToLocalChecked());
 
-	Nan::Set(target, Nan::New("getScreenSize").ToLocalChecked(),
+	Nan::Set(exports, Nan::New("getScreenSize").ToLocalChecked(),
 		Nan::GetFunction(Nan::New<FunctionTemplate>(getScreenSize)).ToLocalChecked());
 
-	Nan::Set(target, Nan::New("captureScreen").ToLocalChecked(),
+	Nan::Set(exports, Nan::New("captureScreen").ToLocalChecked(),
 		Nan::GetFunction(Nan::New<FunctionTemplate>(captureScreen)).ToLocalChecked());
 
-	Nan::Set(target, Nan::New("getColor").ToLocalChecked(),
+	Nan::Set(exports, Nan::New("getColor").ToLocalChecked(),
 		Nan::GetFunction(Nan::New<FunctionTemplate>(getColor)).ToLocalChecked());
 
-	Nan::Set(target, Nan::New("getXDisplayName").ToLocalChecked(),
+	Nan::Set(exports, Nan::New("getXDisplayName").ToLocalChecked(),
 		Nan::GetFunction(Nan::New<FunctionTemplate>(getXDisplayName)).ToLocalChecked());
 
-	Nan::Set(target, Nan::New("setXDisplayName").ToLocalChecked(),
+	Nan::Set(exports, Nan::New("setXDisplayName").ToLocalChecked(),
 		Nan::GetFunction(Nan::New<FunctionTemplate>(setXDisplayName)).ToLocalChecked());
+
+
+
 }
 
-NODE_MODULE(robotjs, InitAll)
+// https://github.com/nodejs/node/blob/master/test/addons/worker-addon/binding.cc
+// NAN_MODULE_WORKER_ENABLED(robotjs, InitAll)
+NODE_MODULE_CONTEXT_AWARE(NODE_GYP_MODULE_NAME, Initialize)
