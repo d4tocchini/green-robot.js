@@ -831,24 +831,99 @@ NAN_METHOD(getColor)
 
 }
 
+#if defined(IS_WINDOWS)
+#include <windows.h>
+#endif
+
+
+struct point_t {
+    int x;
+    int y;
+    point_t(): x(0), y(0) {};
+};
+
+// bool sourceId2Coordinates(int sourceId, Point* res);
+
+
+
+/**
+ * Tries to get the coordinates of a desktop from passed sourceId
+ * (which identifies a desktop sharing source). Used to match the source id to a
+ * screen in Electron.
+ *
+ * Returns true on success and false on failure.
+ *
+ * NOTE: Works on windows only because on the other platforms there is an easier
+ * way to match the source id and the screen.
+ */
+bool source_id2coord(int sourceId, point_t* res)
+{
+#if defined(IS_WINDOWS)
+    DISPLAY_DEVICE device;
+    device.cb = sizeof(device);
+
+    if (!EnumDisplayDevices(NULL, sourceId, &device, 0) // device not found
+        || !(device.StateFlags & DISPLAY_DEVICE_ACTIVE))// device is not active
+    {
+        return false;
+    }
+
+    DEVMODE deviceSettings;
+    deviceSettings.dmSize = sizeof(deviceSettings);
+    deviceSettings.dmDriverExtra = 0;
+    if(!EnumDisplaySettingsEx(device.DeviceName, ENUM_CURRENT_SETTINGS,
+        &deviceSettings, 0))
+    {
+        return false;
+    }
+
+    res->x = deviceSettings.dmPosition.x;
+    res->y = deviceSettings.dmPosition.y;
+
+    return true;
+#else
+    return false;
+#endif
+}
+
+NAN_METHOD(source_id2coord)
+{
+	const int sourceID =  Nan::To<int32_t>(info[0]).FromJust();
+	Local<Object> obj = Nan::New<Object>();
+	point_t coordinates;
+	if(!source_id2coord(sourceID, &coordinates))
+	{ // return undefined if source_id2coord function fail.
+		info.GetReturnValue().Set(Nan::Undefined());
+	}
+	else
+	{ // return the coordinates if source_id2coord function succeed.
+		Nan::Set(obj, Nan::New("x").ToLocalChecked(), Nan::New(coordinates.x));
+		Nan::Set(obj, Nan::New("y").ToLocalChecked(), Nan::New(coordinates.y));
+		info.GetReturnValue().Set(obj);
+	}
+}
+
+
 NAN_MODULE_INIT(Initialize) {
 	//   auto isolate = context->GetIsolate();
 	auto exports = target;
 
-	
+	Nan::Set(exports,
+		Nan::New("source_id2coord").ToLocalChecked(),
+		Nan::GetFunction(Nan::New<FunctionTemplate>(source_id2coord)) .ToLocalChecked()
+	);
 	Nan::Set(exports,
 		Nan::New("dragMouse").ToLocalChecked(),
-		Nan::GetFunction(Nan::New<FunctionTemplate>(dragMouse)).ToLocalChecked());
-
-
-	// Nan::Set(exports, ,
-	// 	);
-
-	Nan::Set(exports, Nan::New("moveMouse").ToLocalChecked(),
-		Nan::GetFunction(Nan::New<FunctionTemplate>(moveMouse)).ToLocalChecked());
-
-	Nan::Set(exports, Nan::New("moveMouseSmooth").ToLocalChecked(),
-		Nan::GetFunction(Nan::New<FunctionTemplate>(moveMouseSmooth)).ToLocalChecked());
+		Nan::GetFunction(Nan::New<FunctionTemplate>(dragMouse)).ToLocalChecked()
+	);
+	Nan::Set(exports,
+		Nan::New("moveMouse").ToLocalChecked(),
+		Nan::GetFunction(Nan::New<FunctionTemplate>(moveMouse)).ToLocalChecked()
+	);
+	Nan::Set(exports,
+		Nan::New("moveMouseSmooth").ToLocalChecked(),
+		Nan::GetFunction(Nan::New<FunctionTemplate>(moveMouseSmooth)).ToLocalChecked()
+	);
 
 	Nan::Set(exports, Nan::New("getMousePos").ToLocalChecked(),
 		Nan::GetFunction(Nan::New<FunctionTemplate>(getMousePos)).ToLocalChecked());

@@ -62,5 +62,8 @@
       'src/snprintf.c',
       'src/MMBitmap.c'
     ]
-  }]
+  }],
+  'variables': {
+        'build_v8_with_gn': 0
+    },
 }

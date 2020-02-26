@@ -9,7 +9,7 @@
     "test:darwin:linux": "jasmine 'test/**/*.js'",
     "test:win32": "jasmine test/**/*.js",
     "build-node": "node-gyp rebuild",
-    "build-electron": "HOME=~/.electron-gyp node-gyp rebuild  --target=7.0.0 --arch=x64 --dist-url=https://electronjs.org/headers",
+    "build-electron": "HOME=~/.electron-gyp node-gyp rebuild  --target=8.0.1 --arch=x64 --dist-url=https://electronjs.org/headers",
     "_prebuild": "prebuild --all"
   },
   "repository": {
