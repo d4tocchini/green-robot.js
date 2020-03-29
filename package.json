@@ -9,8 +9,9 @@
     "test:darwin:linux": "jasmine 'test/**/*.js'",
     "test:win32": "jasmine test/**/*.js",
     "build-node": "node-gyp rebuild",
-    "build-electron": "HOME=~/.electron-gyp node-gyp rebuild  --target=8.0.1 --arch=x64 --dist-url=https://electronjs.org/headers",
-    "_prebuild": "prebuild --all"
+    "build-electron": "HOME=~/.electron-gyp node-gyp rebuild  --target=8.2.0 --arch=x64 --dist-url=https://electronjs.org/headers",
+    "_prebuild": "prebuild --all",
+    "install": "echo 'green-robot.js: npm install ...'"
   },
   "repository": {
     "type": "git",
